@@ -1,0 +1,46 @@
+version: 1
+
+skills:
+  mitmproxy-install:
+    positive:
+      - id: install-macos
+        prompt: "Install mitmproxy on my Mac."
+        reason: "Native OS installation is owned by mitmproxy-install."
+      - id: project-venv
+        prompt: "I only want mitmproxy inside this repo's .venv, not globally."
+        reason: "Project-scoped environment selection and verification belong here."
+      - id: addon-dependency
+        prompt: "My mitmproxy addon imports boto3. How should I install both without touching system Python?"
+        reason: "Isolated tool/project dependency strategy belongs here."
+      - id: windows-path
+        prompt: "I upgraded mitmproxy on Windows but the terminal still runs the old version."
+        reason: "Installation provenance and PATH diagnosis belong here."
+      - id: contributor-bootstrap
+        prompt: "Set up a fresh checkout so I can work on mitmproxy core."
+        reason: "Development-environment preparation belongs here before contribution gates."
+
+    negative:
+      - id: capture-mode
+        prompt: "Should I use WireGuard mode or local capture for this Android phone?"
+        expected_skill: mitmproxy-capture
+        reason: "The question assumes mitmproxy exists and asks for interception topology."
+      - id: write-addon
+        prompt: "Write an addon hook that rewrites JSON responses."
+        expected_skill: mitmproxy-addons
+        reason: "Implementation of addon behavior is not installation."
+      - id: tls-debug
+        prompt: "Why is this HTTP/2 connection failing after ALPN negotiation?"
+        expected_skill: mitmproxy-protocols
+        reason: "Protocol diagnosis is not environment setup."
+      - id: upstream-pr
+        prompt: "Review my mitmproxy patch and tell me whether it's ready for a PR."
+        expected_skill: mitmproxy-contribute
+        reason: "Final contribution quality gates belong to the contribution skill."
+
+    ambiguous:
+      - id: install-then-phone
+        prompt: "Get mitmproxy installed and intercept traffic from my test phone."
+        expected_behavior: "Use mitmproxy-install for environment setup, then hand off to mitmproxy-capture for topology/certificate/traffic verification."
+      - id: source-and-fix
+        prompt: "Clone mitmproxy, reproduce issue #123, fix it, and prepare the PR."
+        expected_behavior: "Use mitmproxy-install only for source-environment bootstrap, then mitmproxy-discover/specialist skill and mitmproxy-contribute."
